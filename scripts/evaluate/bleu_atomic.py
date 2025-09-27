@@ -7,7 +7,6 @@ from nltk import bleu
 from nltk.translate.bleu_score import SmoothingFunction
 from tqdm import tqdm
 
-import pandas
 import json
 import pickle
 
