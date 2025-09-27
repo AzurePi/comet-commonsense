@@ -3,13 +3,11 @@ import random
 
 import torch
 
-import src.train.atomic_train as train
-import src.models.models as models
-import src.data.data as data
-import utils.utils as utils
-import src.train.utils as train_utils
 import src.data.config as cfg
-
+import src.data.data as data
+import src.models.models as models
+import src.train.atomic_train as train
+import utils.utils as utils
 from src.data.utils import TextEncoder
 from src.train.opt import OpenAIAdam
 

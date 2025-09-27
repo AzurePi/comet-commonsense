@@ -1,6 +1,8 @@
-import src.train.batch as batch
-import src.evaluate.evaluate as base_evaluate
 import numpy as np
+
+import src.evaluate.evaluate as base_evaluate
+import src.train.batch as batch
+
 
 def make_evaluator(opt, *args):
     if opt.exp == "generation":

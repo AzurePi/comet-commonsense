@@ -1,10 +1,13 @@
-from src.models.gpt import (LMModel, DEFAULT_CONFIG, load_openai_pretrained_model)
+import torch
+import torch.distributed as dist
 import torch.nn as nn
+
+from src.models.gpt import (LMModel, load_openai_pretrained_model)
 
 
 def make_model(opt, n_vocab, n_ctx, n_special, load=True,
                return_acts=True, return_probs=False,
-               clf_token="<CLASS>", answer_size=None):
+               clf_token="<CLASS>", answer_size=None, compile_model=False):
     print(n_ctx)
     if opt.exp == "generation":
         model = LMModel(
@@ -17,11 +20,21 @@ def make_model(opt, n_vocab, n_ctx, n_special, load=True,
         print("LOADING PRETRAINED TRANSFORMER")
         load_openai_pretrained_model(
             model.transformer, n_ctx=n_ctx, n_special=n_special)
+    if compile_model:
+        model = torch.compile(model)
     return model
 
 
+
 def multi_gpu(model, devices):
-    return nn.DataParallel(model, device_ids=devices)
+    # devices deve ser uma lista de índices de GPU
+    if not dist.is_initialized():
+        dist.init_process_group(backend="nccl")
+    local_rank = devices[0] if isinstance(devices, (list, tuple)) else devices
+    torch.cuda.set_device(local_rank)
+    model = model.to(local_rank)
+    model = nn.parallel.DistributedDataParallel(model, device_ids=[local_rank])
+    return model
 
 
 def load_state_dict(model, state_dict):

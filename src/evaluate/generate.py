@@ -1,5 +1,5 @@
-import src.data.data as data
 import src.data.config as cfg
+import src.data.data as data
 import src.evaluate.sampler as sampling
 
 

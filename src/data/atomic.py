@@ -1,14 +1,14 @@
-import utils.utils as utils
-import src.data.utils as data_utils
-import src.data.config as cfg
+import json
+import math
+import random
 
 import pandas
-import json
-import random
-import math
 import torch
-
 from tqdm import tqdm
+
+import src.data.config as cfg
+import src.data.utils as data_utils
+import utils.utils as utils
 
 
 def map_name(name):

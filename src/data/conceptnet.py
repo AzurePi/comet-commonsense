@@ -1,10 +1,11 @@
-import src.data.utils as data_utils
-import src.data.atomic as adata
-import src.data.config as cfg
+import random
 
 import torch
-import random
 from tqdm import tqdm
+
+import src.data.atomic as adata
+import src.data.config as cfg
+import src.data.utils as data_utils
 
 
 def map_name(name, opt):

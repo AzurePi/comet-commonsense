@@ -1,15 +1,12 @@
-
 import random
 
 import torch
 
-import src.train.conceptnet_train as train
-import src.models.models as models
-import src.data.data as data
-import utils.utils as utils
-import src.train.utils as train_utils
 import src.data.config as cfg
-
+import src.data.data as data
+import src.models.models as models
+import src.train.conceptnet_train as train
+import utils.utils as utils
 from src.data.utils import TextEncoder
 from src.train.opt import OpenAIAdam
 
@@ -105,14 +102,10 @@ def main(num):
     # Push to GPU
     if config.gpu_mode:
         print("Pushing to GPU: {}".format(config.gpu_index))
-        cfg.device = config.gpu_index
-        cfg.do_gpu = True
-        torch.cuda.set_device(cfg.device)
+        device = torch.device(f"cuda:{config.gpu_index}" if config.gpu_mode else "cpu")
+        model = model.to(device)
         if config.multigpu:
-            model = models.multi_gpu(
-                model, config.gpu_indices).cuda()
-        else:
-            model.cuda(cfg.device)
+            model = torch.nn.DataParallel(model, device_ids=config.gpu_indices)
         print("Done.")
 
     print("Training")

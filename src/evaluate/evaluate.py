@@ -1,8 +1,9 @@
 import time
+
 import torch
 
-import utils.utils as utils
 import src.data.config as cfg
+import utils.utils as utils
 
 
 class Evaluator(object):

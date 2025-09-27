@@ -1,16 +1,10 @@
-
-import copy
-
-import torch
-import torch.nn as nn
 import torch.nn.functional as F
-
 import src.data.config as cfg
-import src.train.utils as train_utils
-import src.models.utils as model_utils
-import src.evaluate.utils as eval_utils
-import utils.utils as utils
 from IPython import embed
+
+import src.evaluate.utils as eval_utils
+import src.models.utils as model_utils
+import src.train.utils as train_utils
 
 
 ##############################################################################
@@ -33,7 +27,7 @@ def batch_atomic_generate(opt, nums, losses, batch_variables, eval_mode=False):
     targets = input_.squeeze(0)[:, 1:, 0].contiguous().view(-1)
 
     loss, dist = mle_steps(
-        opt.net.model, model, input_[:, :-1, :], targets,
+        model, input_[:, :-1, :], targets,
         attention_mask[:, :-1], loss_reduction="none")
 
     # Set loss name
@@ -73,7 +67,7 @@ def batch_conceptnet_generate(opt, nums, losses, batch_variables,
     targets = input_.squeeze(0)[:, 1:, 0].contiguous().view(-1)
 
     loss, dist = mle_steps(
-        opt.net.model, model, input_[:, :-1, :], targets,
+        model, input_[:, :-1, :], targets,
         attention_mask[:, :-1], loss_reduction="none")
 
     # Set loss name
@@ -102,10 +96,13 @@ def batch_conceptnet_generate(opt, nums, losses, batch_variables,
     return outputs
 
 
-def mle_steps(key, model, input_, targets, attention_mask,
-              loss_reduction="mean", i=None):
+def mle_steps(model, input_, targets, attention_mask,
+              loss_reduction="mean"):
+    input_ = input_.to(cfg.device)
+    targets = targets.to(cfg.device)
+
     word_acts = decode(model, input_.unsqueeze(1),
-                       attention_mask, i)
+                       attention_mask)
 
     word_dist = train_utils.modify_output_for_loss_fn(
         "nll", word_acts, dim=-1)
@@ -113,7 +110,7 @@ def mle_steps(key, model, input_, targets, attention_mask,
     # Compute losses
     loss = F.nll_loss(
         word_dist.view(-1, word_dist.size(-1)),
-        targets, reduction=loss_reduction)
+        targets, reduction=loss_reduction).to(cfg.device)
 
     if loss_reduction != "mean":
         return loss.view(word_dist.size(0), -1), word_dist
@@ -121,7 +118,9 @@ def mle_steps(key, model, input_, targets, attention_mask,
         return loss, word_dist
 
 
-def decode(model, input_, attention_mask, i=None):
+def decode(model, input_, attention_mask):
+    input_ = input_.to(cfg.device)
+    attention_mask = attention_mask.to(cfg.device)
     return model(input_, sequence_mask=attention_mask)
 
 

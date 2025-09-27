@@ -1,13 +1,10 @@
-import json
-import copy
-
-import torch
-
-import numpy as np
 import contextlib
-
+import copy
+import json
 from distutils.dir_util import mkpath
 
+import numpy as np
+import torch
 from tqdm import tqdm
 
 

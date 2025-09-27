@@ -1,13 +1,10 @@
-import sys
-import os
 import argparse
+import os
+import sys
 
 sys.path.append(os.getcwd())
 
 import pickle
-
-import torch
-
 
 combine_into_words = {
     'at location': 'AtLocation',

@@ -6,10 +6,11 @@ https://ttic.uchicago.edu/~kgimpel/commonsense.html
 
 ################################################################################'''
 
-import pickle
-import numpy as np
-import sys
 import math
+import pickle
+
+import numpy as np
+
 
 def getVec(We, words, t):
     t = t.strip()

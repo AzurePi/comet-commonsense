@@ -1,8 +1,8 @@
-import torch
-import torch.optim
-import torch.nn.functional as F
-
 import copy
+
+import torch
+import torch.nn.functional as F
+import torch.optim
 
 
 def update_generation_losses(losses, nums, micro, macro, bs, length, loss):

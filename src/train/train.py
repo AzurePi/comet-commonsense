@@ -1,19 +1,11 @@
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
+from tensorboardX import SummaryWriter
+from tqdm import tqdm
 
 import src.data.config as cfg
 import src.data.data as data
-import src.train.utils as train_utils
-import src.train.batch as batch
-
-import src.evaluate.evaluate as evaluate
 import src.evaluate.generate as gen
-import src.evaluate.sampler as sampling
-
 import utils.utils as utils
-
-from tensorboardX import SummaryWriter
 
 
 class Trainer(object):
@@ -88,7 +80,7 @@ class Trainer(object):
     def run(self):
         self.set_logger()
         self.count = 0
-        for epoch in range(self.epochs):
+        for epoch in tqdm(range(self.epochs)):
             self.model.train()
             self.opt.train.dynamic.epoch += 1
             self.epoch()
@@ -164,7 +156,7 @@ class Trainer(object):
 
     def update_parameters(self):
         if self.opt.model == "lstm":
-                self.clip_gradients()
+            self.clip_gradients()
         self.optimizer.step()
         self.optimizer.zero_grad()
 
@@ -230,4 +222,3 @@ class IteratorTrainer(Trainer):
 
             if reset:
                 self.data_loader.reset_offsets("train")
-

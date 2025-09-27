@@ -1,10 +1,11 @@
 import time
+
 import torch
 
+import src.data.config as cfg
 import src.evaluate.generate as base_generate
 import src.evaluate.sampler as sampling
 import utils.utils as utils
-import src.data.config as cfg
 
 
 def make_generator(opt, *args):

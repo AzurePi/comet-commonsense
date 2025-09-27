@@ -1,7 +1,10 @@
 import json
+
+import torch
+
 from utils.utils import DD
 
-device = "cpu"
+device = "cuda" if torch.cuda.is_available() else "cpu"
 
 save = False
 test_save = False
@@ -165,18 +168,30 @@ def get_net_parameters(opt):
 
 
 def read_config(file_):
+    """
+    Converte o JSON carregado em DD, transformando
+    valores "T"/"F" em True/False recursivamente.
+    """
     config = DD()
-    print(file_)
     for k, v in file_.items():
-        if v == "True" or v == "T" or v == "true":
-            config[k] = True
-        elif v == "False" or v == "F" or v == "false":
-            config[k] = False
-        elif type(v) == dict:
+        if isinstance(v, dict):
             config[k] = read_config(v)
+        elif isinstance(v, str):
+            if v.upper() in ["T", "TRUE"]:
+                config[k] = True
+            elif v.upper() in ["F", "FALSE"]:
+                config[k] = False
+            else:
+                try:
+                    # tenta converter para número se possível
+                    config[k] = int(v)
+                except:
+                    try:
+                        config[k] = float(v)
+                    except:
+                        config[k] = v
         else:
             config[k] = v
-
     return config
 
 

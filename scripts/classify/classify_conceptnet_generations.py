@@ -1,6 +1,5 @@
-import os
-import sys
 import argparse
+
 import demo_bilinear
 
 train_file = "data/conceptnet/train100k.txt.gz"

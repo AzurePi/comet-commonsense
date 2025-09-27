@@ -1,7 +1,7 @@
-import os
-import sys
-import pickle
 import argparse
+import os
+import pickle
+import sys
 
 sys.path.append(os.getcwd())
 

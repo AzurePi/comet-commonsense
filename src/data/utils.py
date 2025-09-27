@@ -1,14 +1,14 @@
-import re
-import ftfy
 import json
+import re
+
+import ftfy
 import spacy
 import torch
-
 from tqdm import tqdm
 
 
 def load_existing_data_loader(data_loader, path):
-    old_data_loader = torch.load(path)
+    old_data_loader = torch.load(path, map_location="cpu")
     for attr in data_loader.__dict__.keys():
         if attr not in old_data_loader.__dict__.keys():
             continue
@@ -57,8 +57,7 @@ class TextEncoder(object):
     """
 
     def __init__(self, encoder_path, bpe_path):
-        self.nlp = spacy.load(
-            'en_core_web_sm', disable=['parser', 'tagger', 'ner', 'textcat', 'lemmatizer'])
+        self.nlp = self.nlp = spacy.load("en_core_web_sm", exclude=["parser", "tagger", "ner", "textcat", "lemmatizer"])
         self.encoder = json.load(open(encoder_path))
         self.decoder = {v: k for k, v in self.encoder.items()}
         merges = open(bpe_path, encoding='utf-8').read().split('\n')[1:-1]

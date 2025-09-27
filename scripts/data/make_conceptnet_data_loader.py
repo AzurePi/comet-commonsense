@@ -9,9 +9,7 @@ import src.data.data as data
 
 from utils.utils import DD
 import utils.utils as utils
-import random
 from src.data.utils import TextEncoder
-from tqdm import tqdm
 
 opt = DD()
 opt.dataset = "conceptnet"

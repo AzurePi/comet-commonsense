@@ -1,14 +1,12 @@
 import torch
 
-from src.data.utils import TextEncoder
 import src.data.config as cfg
 import src.data.data as data
 import src.models.models as models
 import src.train.batch as batch_utils
-
-from src.evaluate.sampler import BeamSampler, GreedySampler, TopKSampler
-
 import utils.utils as utils
+from src.data.utils import TextEncoder
+from src.evaluate.sampler import BeamSampler, GreedySampler, TopKSampler
 
 
 def load_model_file(model_file):
@@ -306,7 +304,7 @@ def evaluate_conceptnet_sequence(e1, model, data_loader,
             targets = input_[:, 1:, 0].contiguous().view(-1)
 
             loss, dist = batch_utils.mle_steps(
-                "", model, input_[:, :-1, :], targets,
+                model, input_[:, :-1, :], targets,
                 attention_mask[:, :-1], loss_reduction="none")
 
             final_loss = (loss * loss_mask)

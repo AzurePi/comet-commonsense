@@ -1,8 +1,8 @@
-import random
-
-import src.train.train as base_train
-import src.train.batch as batch
 import src.evaluate.atomic_evaluate as evaluate
+import src.train.batch as batch
+import src.train.train as base_train
+
+
 # import src.evaluate.atomic_generate as gen
 
 
