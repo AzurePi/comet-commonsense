@@ -32,9 +32,6 @@ def main(num):
     if config.gpu_mode:
         torch.cuda.manual_seed_all(opt.train.static.seed)
 
-    # Load the data
-    splits = ["train", "dev", "test"]
-
     opt.train.dynamic.epoch = 0
 
     print("Loading Data")
@@ -87,7 +84,7 @@ def main(num):
 
     model = models.make_model(
         opt, n_vocab, n_ctx, n_special,
-        load=(opt.net.init=="pt"))
+        load=(opt.net.init == "pt"))
 
     print("Done.")
 

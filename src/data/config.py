@@ -11,10 +11,10 @@ test_save = False
 toy = False
 do_gen = False
 
-save_strategy = "all"
+save_strategy = "best"
 
 
-def get_parameters(opt, exp_type="model"):
+def get_parameters(opt):
     params = DD()
     params.net = DD()
 
@@ -27,7 +27,7 @@ def get_parameters(opt, exp_type="model"):
     params.model = params.net.model
     params.exp = opt.exp
 
-    params.data = get_data_parameters(opt, params.exp, params.dataset)
+    params.data = get_data_parameters(opt, params.dataset)
     params.eval = get_eval_parameters(opt, params.data.get("categories", None))
 
     meta = DD()
@@ -85,7 +85,7 @@ def get_eval_parameters(opt, force_categories=None):
     return evaluate
 
 
-def get_data_parameters(opt, experiment, dataset):
+def get_data_parameters(opt, dataset):
     data = DD()
     if dataset == "atomic":
         data.categories = sorted(opt.categories)

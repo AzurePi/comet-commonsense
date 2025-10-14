@@ -8,7 +8,7 @@ from tqdm import tqdm
 
 
 def load_existing_data_loader(data_loader, path):
-    old_data_loader = torch.load(path, map_location="cpu")
+    old_data_loader = torch.load(path, map_location="cpu", weights_only=False)
     for attr in data_loader.__dict__.keys():
         if attr not in old_data_loader.__dict__.keys():
             continue

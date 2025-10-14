@@ -3,9 +3,6 @@ import src.train.batch as batch
 import src.train.train as base_train
 
 
-# import src.evaluate.atomic_generate as gen
-
-
 def make_trainer(opt, *args):
     return AtomicGenerationIteratorTrainer(opt, *args)
 

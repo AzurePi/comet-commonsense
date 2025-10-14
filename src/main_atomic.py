@@ -1,4 +1,3 @@
-
 import random
 
 import torch
@@ -31,9 +30,6 @@ def main(num):
     if config.gpu_mode:
         torch.cuda.manual_seed_all(opt.train.static.seed)
 
-    # Where to find the data
-    splits = ["train", "dev", "test"]
-
     opt.train.dynamic.epoch = 0
 
     print("Loading Data")
@@ -44,7 +40,7 @@ def main(num):
         opt.exp, utils.make_name_string(opt.data))
 
     data_loader = data.make_data_loader(opt, categories)
-    loaded = data_loader.load_data(path)
+    data_loader.load_data(path)
     print(data_loader.sequences["train"]["total"].size(0))
     data_loader.opt = opt
     data_loader.batch_size = opt.train.dynamic.bs
@@ -76,7 +72,7 @@ def main(num):
 
     model = models.make_model(
         opt, n_vocab, n_ctx, n_special,
-        load=(opt.net.init=="pt"))
+        load=(opt.net.init == "pt"))
 
     print("Done.")
 
@@ -115,7 +111,6 @@ def main(num):
                            vector_l2=opt.train.static.vl2,
                            max_grad_norm=opt.train.static.clip)
 
-    scorers = ["bleu", "rouge", "cider"]
     trainer = train.make_trainer(
         opt, meta, data_loader, model, optimizer)
     trainer.set_evaluator(opt, model, data_loader)

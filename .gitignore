@@ -1,5 +1,9 @@
 /.idea/
 /config/
 /model/
+/models/
 /data/
 /logs/
+/finetune-transformer-lm/
+/graphs/
+/results/

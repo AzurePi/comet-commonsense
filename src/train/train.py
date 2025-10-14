@@ -10,6 +10,7 @@ import utils.utils as utils
 
 class Trainer(object):
     def __init__(self, opt, meta, data_loader, model, optimizer):
+        self.count = None
         self.optimizer = optimizer
 
         self.model = model
@@ -72,7 +73,7 @@ class Trainer(object):
         else:
             self.logger = SummaryWriter(utils.make_name(
                 self.opt, prefix="logs/", eval_=True, do_epoch=False))
-        print("Logging Tensorboard Files at: {}".format(self.logger.logdir))
+        print(f"Logging Tensorboard Files at: {self.logger.logdir}")
 
     def stop_logger(self):
         self.logger.close()
@@ -80,7 +81,7 @@ class Trainer(object):
     def run(self):
         self.set_logger()
         self.count = 0
-        for epoch in tqdm(range(self.epochs)):
+        for _ in tqdm(range(self.epochs)):
             self.model.train()
             self.opt.train.dynamic.epoch += 1
             self.epoch()
@@ -199,14 +200,11 @@ class IteratorTrainer(Trainer):
         print(self.losses["train"])
 
         for i in range(1, self.iters + 1):
-            # self.model.zero_grad()
 
             loss, nums, reset = self.do_forward_pass(nums)
             self.do_backward_pass(loss)
 
             self.update_parameters()
-            # print(loss)
-            # print(loss.item())
             self.opt.train.dynamic.epoch += 1
 
             for loss_name in self.losses["train"]:
